@@ -88,7 +88,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <div class="overlay" id="ov">
       <div class="card">
         <h1 id="ovTitle">Зона відчуження</h1>
-        <p id="ovText">Шість локацій від Залісся до ЧАЕС. Збирай артефакти, обходь аномалії, відстрілюй мутантів і ворожих сталкерів. З полеглих сталкерів падають гранати, а в Прип'яті є відкритий люк. Кинь болт в аномалію, і вона згасне на 5 секунд. Зелені ліхтарі — контрольні точки. На кожній локації чекає старий УАЗ: сідай і тарань мутантів та сталкерів, але стеж за станом машини.</p>
+        <p id="ovText">Шість локацій від Залісся до ЧАЕС. Збирай артефакти, обходь аномалії, відстрілюй мутантів і ворожих сталкерів. З полеглих сталкерів падають гранати, а в Прип'яті є відкритий люк. Кинь болт в аномалію, і вона згасне на 5 секунд. Зелені ліхтарі — контрольні точки. На кожній локації чекає старий УАЗ: сідай і тарань мутантів та сталкерів, а ями перелітай з трамплінів на швидкості. Стеж за станом машини.</p>
         <button class="btn" id="ovBtn">Увійти в Зону</button>
       </div>
     </div>
@@ -131,41 +131,42 @@ const THEMES={
   sewer:{sky:["#0d110f","#161d19","#1d2621"],far:"#26302b",mid:"#121815",grass:null}
 };
 
+// Ground is a height map: hills are [col, widthCols, heightPx]; pits get an automatic ramp in front of them,
+// wagons ("W") get one on their left side so the UAZ can drive up.
 const LEVELS=[
  {name:"Залісся", theme:"village", w:66, gaps:[[16,3],[29,3],[45,3]],
-  blocks:[["=",24,7,4],["=",36,6,4],["^",40,9,2],["#",52,9,3],["#",53,8,2]],
-  gems:[[6,8],[8,8],[17,7],[18,7],[25,6],[26,6],[30,7],[37,5],[38,5],[46,7],[53,7],[54,6],[60,8]],
+  hills:[[8,4,36],[20,5,44],[32,4,30],[51,6,60]],
+  blocks:[["^",37,9,2]],
+  gems:[[6,8],[8,7],[17,7],[18,7],[22,6],[23,6],[30,7],[34,6],[38,6],[46,7],[53,6],[54,6],[60,8]],
   enemies:[[22,9,"dog"],[34,9,"boar"],[58,9,"stalker"],[27,4,"crow"]], start:2, cps:[33], flag:63, car:5},
- {name:"Рудий ліс", theme:"forest", w:80, gaps:[[12,3],[22,3],[33,6],[50,3],[64,3]],
-  blocks:[["#",6,9,3],["#",7,8,2],["=",16,7,4],["=",26,6,4],["=",35,8,2],["^",44,9,3],["=",43,6,5],
-          ["#",55,9,4],["#",56,8,3],["#",57,7,2],["^",60,9,2]],
-  gems:[[7,6],[13,7],[17,6],[19,6],[23,7],[27,5],[29,5],[35,7],[36,7],[44,5],[46,5],[51,7],[58,5],[65,7],[72,8]],
-  enemies:[[18,9,"boar"],[28,9,"dog"],[40,9,"stalker"],[70,9,"stalker"],[75,9,"dog"],[20,4,"crow"],[47,3,"crow"]], start:2, cps:[41], flag:77, car:3},
- {name:"Прип'ять", theme:"town", w:90, gaps:[[10,3],[20,3],[30,6],[45,3],[56,8],[72,3]],
-  blocks:[["^",14,9,2],["=",23,6,4],["=",32,8,2],["^",40,9,3],["=",40,6,4],["=",58,8,2],["=",61,7,2],
-          ["^",67,9,2],["#",80,9,2],["#",80,8,2]],
-  gems:[[11,7],[15,7],[21,7],[24,5],[26,5],[32,7],[33,7],[41,5],[43,5],[46,7],[58,7],[61,6],[62,6],[67,7],[73,7],[80,6],[81,6]],
-  enemies:[[17,9,"dog"],[25,9,"stalker"],[38,9,"boar"],[50,9,"stalker"],[76,9,"dog"],[84,9,"big"],[34,4,"crow"],[60,4,"crow"]], start:2, cps:[49], flag:88, hatch:{col:53,ret:77}, car:4},
- {name:"Станція Янів", theme:"rail", w:100, gaps:[[14,3],[26,3],[40,6],[58,3],[70,3],[84,3]],
-  blocks:[["W",18,8,6],["W",18,9,6],["=",42,8,2],["W",48,8,5],["W",48,9,5],["^",55,9,2],["=",62,6,4],
-          ["W",74,8,4],["W",74,9,4],["^",80,9,2]],
-  gems:[[10,7],[15,7],[20,6],[22,6],[27,7],[41,7],[43,6],[44,7],[50,6],[52,6],[59,7],[63,5],[65,5],[71,7],[76,6],[85,7],[92,8]],
-  enemies:[[12,9,"dog"],[20,7,"stalker"],[30,9,"stalker"],[36,9,"boar"],[50,7,"dog"],[64,9,"stalker"],[88,9,"stalker"],[92,9,"dog"],[33,4,"crow"],[66,4,"crow"]],
-  start:2, cps:[46], flag:97, car:5},
- {name:"Радар «Дуга»", theme:"duga", w:105, gaps:[[12,3],[22,6],[36,3],[46,8],[62,3],[74,7],[90,3]],
-  blocks:[["=",24,8,2],["=",14,6,5],["=",30,6,4],["=",38,7,3],["=",42,5,3],["=",48,8,2],["=",51,7,2],
-          ["#",56,9,3],["#",57,8,2],["^",60,9,2],["^",66,9,3],["=",65,6,5],["=",76,8,2],["=",79,7,1],
-          ["#",84,9,2],["^",96,9,2],["=",95,6,4]],
-  gems:[[9,8],[13,7],[15,5],[17,5],[23,7],[24,7],[25,7],[31,5],[33,5],[39,6],[43,4],[44,4],[47,7],[49,7],[51,6],[52,6],[57,6],[61,7],[67,5],[75,7],[77,7],[79,6],[85,7],[91,7],[96,5],[98,5]],
-  enemies:[[8,9,"dog"],[18,9,"stalker"],[32,9,"boar"],[40,9,"stalker"],[43,4,"stalker"],[55,9,"dog"],[70,9,"stalker"],[67,5,"stalker"],[86,9,"boar"],[94,9,"stalker"],[16,4,"crow"],[50,3,"crow"],[78,3,"crow"]],
-  start:2, cps:[54], flag:102, car:5},
- {name:"ЧАЕС", theme:"npp", w:115, gaps:[[10,3],[20,3],[30,7],[47,3],[58,8],[76,3],[86,6],[100,3]],
-  blocks:[["=",32,8,2],["=",60,8,2],["=",63,7,2],["=",88,8,2],["^",15,9,2],["#",24,9,2],["#",24,8,2],["=",40,6,4],["^",42,9,3],
-          ["#",52,9,3],["^",70,9,2],["=",69,6,4],["#",80,9,3],["#",81,8,2],["^",95,9,2],["#",104,9,2],["#",104,8,2]],
-  gems:[[11,7],[16,7],[21,7],[24,6],[25,6],[31,7],[33,7],[35,6],[41,5],[43,5],[48,7],[53,7],[60,7],[63,6],[64,6],[70,5],[72,5],[77,7],[82,6],[88,7],[96,7],[101,7],[105,6]],
-  enemies:[[6,9,"dog"],[17,9,"stalker"],[27,9,"boar"],[38,9,"stalker"],[41,5,"stalker"],[50,9,"dog"],[56,9,"stalker"],[67,9,"boar"],[71,5,"stalker"],
-           [81,7,"stalker"],[84,9,"dog"],[93,9,"stalker"],[109,9,"big"],[25,3,"crow"],[45,3,"crow"],[62,3,"crow"],[90,3,"crow"]],
-  start:2, cps:[37,66], flag:112, bossHp:8, car:4}
+ {name:"Рудий ліс", theme:"forest", w:80, gaps:[[12,3],[22,3],[33,4],[50,3],[64,3]],
+  hills:[[5,3,40],[15,3,30],[25,4,40],[53,6,72]],
+  blocks:[["^",42,9,2],["^",68,9,2]],
+  gems:[[6,7],[13,7],[16,7],[19,7],[23,7],[26,6],[28,6],[34,7],[35,7],[40,7],[45,7],[51,7],[56,5],[65,7],[72,8]],
+  enemies:[[18,9,"boar"],[28,9,"dog"],[40,9,"stalker"],[71,9,"stalker"],[75,9,"dog"],[20,4,"crow"],[47,3,"crow"]], start:2, cps:[39], flag:77, car:2},
+ {name:"Прип'ять", theme:"town", w:90, gaps:[[10,3],[20,3],[30,4],[45,3],[56,4],[72,3]],
+  hills:[[23,3,36],[60,3,30],[79,4,60]],
+  blocks:[["^",14,9,2],["^",37,9,2],["^",65,9,2]],
+  gems:[[11,7],[15,7],[21,7],[24,6],[25,6],[31,7],[32,7],[39,7],[43,7],[46,7],[57,7],[58,7],[61,6],[67,7],[73,7],[80,6],[81,6]],
+  enemies:[[17,9,"dog"],[25,9,"stalker"],[39,9,"boar"],[50,9,"stalker"],[76,9,"dog"],[84,9,"big"],[34,4,"crow"],[60,4,"crow"]], start:2, cps:[49], flag:88, hatch:{col:63,ret:77}, car:3},
+ {name:"Станція Янів", theme:"rail", w:100, gaps:[[14,3],[31,3],[42,4],[64,3],[72,3],[89,3]],
+  blocks:[["W",21,8,6],["W",21,9,6],["W",52,8,5],["W",52,9,5],["^",58,9,2],["W",79,8,4],["W",79,9,4],["^",83,9,2]],
+  gems:[[10,7],[15,7],[22,6],[25,6],[32,7],[36,7],[43,6],[44,7],[53,6],[55,6],[65,7],[68,7],[73,7],[80,6],[86,7],[90,7],[94,8]],
+  enemies:[[12,9,"dog"],[23,7,"stalker"],[35,9,"stalker"],[47,9,"boar"],[54,7,"dog"],[67,9,"stalker"],[93,9,"stalker"],[95,9,"dog"],[33,4,"crow"],[66,4,"crow"]],
+  start:2, cps:[46], flag:97, car:4},
+ {name:"Радар «Дуга»", theme:"duga", w:105, gaps:[[12,3],[22,4],[36,3],[46,4],[62,3],[74,4],[90,3]],
+  hills:[[27,4,40],[51,5,56],[78,4,48]],
+  blocks:[["^",66,9,2],["^",83,9,2],["^",96,9,2]],
+  gems:[[9,8],[13,7],[16,7],[18,7],[23,7],[24,7],[25,7],[28,6],[30,6],[37,7],[40,7],[44,7],[47,7],[48,7],[53,5],[57,7],[63,7],[67,7],[70,7],[75,7],[76,7],[79,6],[85,7],[91,7],[97,7],[99,7]],
+  enemies:[[8,9,"dog"],[18,9,"stalker"],[32,9,"boar"],[40,9,"stalker"],[43,9,"stalker"],[55,9,"dog"],[70,9,"stalker"],[68,9,"stalker"],[86,9,"boar"],[94,9,"stalker"],[16,4,"crow"],[50,3,"crow"],[78,3,"crow"]],
+  start:2, cps:[54], flag:102, car:4},
+ {name:"ЧАЕС", theme:"npp", w:115, gaps:[[10,3],[20,3],[30,4],[47,3],[58,4],[76,3],[86,4],[100,3]],
+  hills:[[23,3,40],[50,4,36],[63,3,30],[79,3,50],[104,3,56]],
+  blocks:[["^",14,9,2],["^",38,9,2],["^",68,9,2],["^",93,9,2]],
+  gems:[[11,7],[15,6],[21,7],[24,6],[25,6],[31,7],[32,7],[35,7],[41,7],[44,7],[48,7],[52,6],[59,7],[60,7],[64,6],[70,7],[72,7],[77,7],[80,6],[87,7],[96,7],[101,7],[105,6]],
+  enemies:[[6,9,"dog"],[17,9,"stalker"],[27,9,"boar"],[36,9,"stalker"],[41,9,"stalker"],[50,9,"dog"],[56,9,"stalker"],[66,9,"boar"],[71,9,"stalker"],
+           [80,9,"stalker"],[84,9,"dog"],[91,9,"stalker"],[109,9,"big"],[25,3,"crow"],[45,3,"crow"],[62,3,"crow"],[90,3,"crow"]],
+  start:2, cps:[37,66], flag:112, bossHp:8, car:2}
 ];
 const SUB={name:"Підземні комунікації", theme:"sewer", sub:true, w:72, spawnRow:7,
   pipes:[[0,8,8],[10,8,5],[12,5,3],[17,7,4],[23,8,6],[26,5,3],[31,6,3],[36,8,6],[44,7,3],[46,4,3],[49,8,7],[58,7,3],[63,8,9]],
@@ -204,27 +205,32 @@ function buildLevel(def){
     for(let c=0;c<L.w;c++){grid[0][c]="#";grid[1][c]="#";grid[10][c]="S";grid[11][c]="S";}
     for(const [c,r,n] of L.pipes) for(let k=0;k<n;k++) grid[r][c+k]="P";
     for(const [c,r,n] of L.walls) for(let k=0;k<n;k++) grid[r+k][c]="P";
+    terr=null;
   }else{
-    for(let c=0;c<L.w;c++){grid[10][c]="#";grid[11][c]="#";}
-    for(const [s,n] of L.gaps) for(let c=s;c<s+n;c++){grid[10][c]=" ";grid[11][c]=" ";}
     for(const [ch,c,r,n] of L.blocks) for(let k=0;k<n;k++) grid[r][c+k]=ch;
     if(L.hatch){grid[10][L.hatch.col]="H";grid[11][L.hatch.col]="H";}
+    buildTerrain();
   }
-  gems=L.gems.map(([c,r],k)=>({x:c*T+16,y:r*T+16,taken:false,col:ART_COLORS[k%ART_COLORS.length],ph:k}));
+  gems=L.gems.map(([c,r],k)=>{
+    let y=r*T+16;
+    if(terr){const s=Math.min(surf(c*T+16),BASE);y=Math.min(Math.max(y,s-125),s-18);}
+    return {x:c*T+16,y,taken:false,col:ART_COLORS[k%ART_COLORS.length],ph:k};
+  });
   enemies=L.enemies.map(([c,r,type],k)=>{
     const d=ETYPES[type], hp=type==="big"&&L.bossHp?L.bossHp:d.hp;
-    const e={type,x:c*T+(T-d.w)/2,y:(r+1)*T-d.h,w:d.w,h:d.h,speed:d.speed,face:-1,vx:0,vy:0,hp,max:hp,alive:true,dead:0,hit:0,cd:.8,flash:0,alert:false};
+    const ex=c*T+(T-d.w)/2;
+    const e={type,x:ex,y:type==="crow"?(r+1)*T-d.h:topAt(ex+d.w/2,r+1)-d.h,w:d.w,h:d.h,speed:d.speed,face:-1,vx:0,vy:0,hp,max:hp,alive:true,dead:0,hit:0,cd:.8,flash:0,alert:false};
     if(type==="crow"){e.ox=c*T;e.oy=r*T;e.t=k*1.7;}
     return e;
   });
   bullets=[];particles=[];grenades=[];pickups=[];booms=[];texts=[];bolts=[];quiet={};cpCol=L.start;
-  car=L.car!=null?{x:L.car*T,y:10*T-34,w:64,h:34,vx:0,vy:0,onGround:false,coyote:0,face:1,wr:0,hp:CAR_MAX,hit:0,touch:0,zap:0,drive:false,wreck:false,smoke:0}:null;
+  car=L.car!=null?{x:L.car*T,y:topAt(L.car*T+32,2)-34,ang:0,w:64,h:34,vx:0,vy:0,onGround:false,coyote:0,face:1,wr:0,hp:CAR_MAX,hit:0,touch:0,zap:0,drive:false,wreck:false,smoke:0}:null;
   spawn();
   $("lvlName").textContent=L.name;
   hud();
 }
 function spawn(){
-  p={x:cpCol*T+5,y:(L.spawnRow||9)*T+4,w:22,h:28,vx:0,vy:0,onGround:false,coyote:0,buf:0,face:1,walk:0,inv:1.5,squash:0,cd:0,flash:0,recoil:0};
+  p={x:cpCol*T+5,y:topAt(cpCol*T+16,2)-28,w:22,h:28,vx:0,vy:0,onGround:false,coyote:0,buf:0,face:1,walk:0,inv:1.5,squash:0,cd:0,flash:0,recoil:0};
   ebullets=[];
   if(car)car.drive=false;
   camX=Math.max(0,Math.min(p.x-viewW*.42,L.w*T-viewW));
@@ -243,21 +249,58 @@ function hud(){
 const tile=(c,r)=> (c<0||c>=L.w)?"#":(r<0||r>=ROWS)?" ":grid[r][c];
 const solid=(c,r)=>{const t=tile(c,r);return t==="#"||t==="W"||t==="P";};
 const standable=t=>t==="#"||t==="W"||t==="P"||t==="=";
+// ---------- terrain (height map for surface levels) ----------
+const BASE=10*T;
+let terr=null;
+function hillAt(x){
+  let h=0;
+  for(const [c,w,hh] of L.hills||[]){const half=w*T/2, d=Math.abs(x-(c*T+half));if(d<half)h+=hh*(.5+.5*Math.cos(Math.PI*d/half));}
+  return h;
+}
+const rampAt=(x,ramps)=>{let h=0;for(const q of ramps)if(x>=q.x0&&x<=q.x1)h=Math.max(h,q.h*(x-q.x0)/(q.x1-q.x0));return h;};
+function buildTerrain(){
+  const gap=new Uint8Array(L.w), ramps=[];
+  for(const [s,n] of L.gaps){for(let c=s;c<s+n;c++)gap[c]=1;ramps.push({x0:(s-4)*T,x1:s*T,h:40,launch:true});}
+  if(L.hatch)gap[L.hatch.col]=1;
+  for(const [ch,c,r] of L.blocks) if(ch==="W"&&r===8&&tile(c-1,8)!=="W")ramps.push({x0:(c-4)*T,x1:c*T,h:2*T+4,launch:false});
+  const n=L.w*T/2+2, S=new Float32Array(n);
+  for(let i=0;i<n;i++){const x=i*2;S[i]=BASE-hillAt(x)-rampAt(x,ramps);}
+  terr={S,gap,ramps};
+}
+function surf(x){
+  if(!terr)return Infinity;
+  if(x<0||x>=L.w*T)return BASE;
+  if(terr.gap[Math.floor(x/T)])return Infinity;
+  const i=x/2, i0=Math.floor(i), S=terr.S;
+  return S[i0]+(S[i0+1]-S[i0])*(i-i0);
+}
+const footSurf=o=>Math.min(surf(o.x+2),surf(o.x+o.w/2),surf(o.x+o.w-2));
+// top of whatever an object would stand on in this column, scanning down from a row
+function topAt(x,fromRow){
+  const c=Math.floor(x/T);let t=surf(x);
+  for(let r=fromRow;r<ROWS;r++) if(standable(tile(c,r))){t=Math.min(t,r*T);break;}
+  return t;
+}
 function moveX(o){
   o.x+=o.vx*dt;
   const top=Math.floor(o.y/T), bot=Math.floor((o.y+o.h-.01)/T);
   if(o.vx>0){const c=Math.floor((o.x+o.w)/T);for(let r=top;r<=bot;r++) if(solid(c,r)){o.x=c*T-o.w;return true;}}
   else if(o.vx<0){const c=Math.floor(o.x/T);for(let r=top;r<=bot;r++) if(solid(c,r)){o.x=(c+1)*T;return true;}}
+  if(o.vx&&o.y+o.h-surf(o.vx>0?o.x+o.w-1:o.x+1)>14){o.x-=o.vx*dt;return true;}
   return false;
 }
 function moveY(o){
-  const prevBottom=o.y+o.h;
+  const prevBottom=o.y+o.h, was=o.onGround;
   o.y+=o.vy*dt; o.onGround=false;
   const l=Math.floor(o.x/T), rr=Math.floor((o.x+o.w-.01)/T);
   if(o.vy>0){
     const r=Math.floor((o.y+o.h)/T);
     for(let c=l;c<=rr;c++){const t=tile(c,r);
       if(t==="#"||t==="W"||t==="P"||(t==="="&&prevBottom<=r*T+1)){o.y=r*T-o.h;o.vy=0;o.onGround=true;return;}}
+  }
+  if(o.vy>=0&&terr){
+    const s=footSurf(o), b=o.y+o.h;
+    if((b>=s&&prevBottom<=s+14)||(was&&b<s&&s-b<10)){o.y=s-o.h;o.vy=0;o.onGround=true;}
   }else if(o.vy<0){
     const r=Math.floor(o.y/T);
     for(let c=l;c<=rr;c++) if(solid(c,r)){o.y=(r+1)*T;o.vy=0;return;}
@@ -325,14 +368,14 @@ function quietGroup(c,r){
   texts.push({x:(a+b+1)/2*T,y:r*T,s:"Аномалію знешкоджено",life:1.2});
 }
 function enterSub(){
-  saved={L,TH,grid,gems,enemies,pickups,car,ret:L.hatch.ret};
+  saved={L,TH,grid,gems,enemies,pickups,car,terr,ret:L.hatch.ret};
   buildLevel(SUB);
   $("lvlNum").textContent="Таємний прохід";
   banner=SUB.name;bannerT=2.2;
 }
 function exitSub(){
   const s=saved;saved=null;
-  L=s.L;TH=s.TH;grid=s.grid;gems=s.gems;enemies=s.enemies;pickups=s.pickups;car=s.car;
+  L=s.L;TH=s.TH;grid=s.grid;gems=s.gems;enemies=s.enemies;pickups=s.pickups;car=s.car;terr=s.terr;
   bullets=[];grenades=[];booms=[];particles=[];texts=[];bolts=[];quiet={};
   cpCol=s.ret;spawn();
   $("lvlNum").textContent=`Локація ${lvlIdx+1} з ${LEVELS.length}`;$("lvlName").textContent=L.name;
@@ -362,6 +405,8 @@ function explode(n){
 function lineOfSight(e){
   const r=Math.floor((e.y+e.h-12)/T), c0=Math.floor((e.x+e.w/2)/T), c1=Math.floor((p.x+p.w/2)/T), s=Math.sign(c1-c0);
   for(let c=c0;c!==c1;c+=s) if(solid(c,r)) return false;
+  const ey=e.y+e.h-12, x0=e.x+e.w/2, x1=p.x+p.w/2;
+  for(let x=Math.min(x0,x1);x<Math.max(x0,x1);x+=12) if(surf(x)<ey) return false;
   return true;
 }
 // ---------- UAZ ----------
@@ -390,15 +435,18 @@ function carPhysics(G){
     if(c.vx*dir>=0)c.face=dir;
   }else{const f=(c.onGround?(c.wreck?900:380):60)*dt;c.vx=Math.abs(c.vx)<=f?0:c.vx-Math.sign(c.vx)*f;}
   c.vy=Math.min(c.vy+G*dt,900);
-  if(c.drive){
-    c.coyote=c.onGround?.08:c.coyote-dt;p.buf-=dt;
-    if(p.buf>0&&c.coyote>0){c.vy=-530;p.buf=0;c.coyote=0;}
-  }
+  // no jump button: the UAZ only flies off ramps, and only with enough speed
+  if(c.drive)p.buf=0;
+  if(c.onGround&&terr) for(const q of terr.ramps)
+    if(q.launch&&c.vx>120&&c.x+c.w-2>=q.x1&&c.x+c.w/2<q.x1){c.vy=-Math.min(580,c.vx*1.8);c.onGround=false;break;}
   const fast=Math.abs(c.vx);
   if(moveX(c)){if(c.drive&&fast>230){carDamage(6);shake=.12;burst(c.face>0?c.x+c.w:c.x,c.y+c.h/2,"#f3d27a",6,.5);}c.vx=0;}
-  const hard=c.vy>650;
+  const hard=c.vy>820;
   moveY(c);
   if(hard&&c.onGround&&c.drive){carDamage(4);shake=.1;}
+  const cx=c.x+c.w/2, sb=surf(cx-19), sf=surf(cx+19);
+  const ang=c.onGround?(isFinite(sb)&&isFinite(sf)?Math.max(-.5,Math.min(.5,Math.atan2(sf-sb,38))):0):c.face*Math.max(-.15,Math.min(.15,c.vy/3500));
+  c.ang+=(ang-c.ang)*Math.min(1,dt*12);
   c.wr+=c.vx*dt/7;c.hit=Math.max(0,c.hit-dt);c.touch-=dt;c.zap-=dt;
   // exhaust, and black smoke once it is badly hurt
   c.smoke-=dt;
@@ -436,7 +484,7 @@ function update(){
   }
 
   // checkpoints
-  for(const c of L.cps) if(c>cpCol&&p.x>c*T){cpCol=c;burst(c*T+16,9*T,"#7fe08a",12,.6);}
+  for(const c of L.cps) if(c>cpCol&&p.x>c*T){cpCol=c;burst(c*T+16,topAt(c*T+16,2)-32,"#7fe08a",12,.6);}
 
   // shooting
   p.cd-=dt;p.flash-=dt;p.recoil=Math.max(0,p.recoil-dt*20);
@@ -447,7 +495,7 @@ function update(){
   }
   for(const b of bullets){
     b.x+=b.vx*dt;b.life-=dt;
-    if(solid(Math.floor(b.x/T),Math.floor(b.y/T))){b.life=0;burst(b.x,b.y,"#f3d27a",4,.5);continue;}
+    if(solid(Math.floor(b.x/T),Math.floor(b.y/T))||b.y>surf(b.x)){b.life=0;burst(b.x,b.y,"#f3d27a",4,.5);continue;}
     for(const e of enemies){
       if(e.alive&&b.x>e.x&&b.x<e.x+e.w&&b.y>e.y-2&&b.y<e.y+e.h+2){b.life=0;damage(e,1);burst(b.x,b.y,"#c94a43",4,.6);break;}
     }
@@ -463,10 +511,12 @@ function update(){
   for(const n of grenades){
     n.fuse-=dt;n.vy=Math.min(n.vy+1300*dt,900);n.rot+=n.vx*dt*.08;
     n.x+=n.vx*dt;
-    if(solid(Math.floor(n.x/T),Math.floor(n.y/T))){n.x-=n.vx*dt;n.vx*=-.45;}
+    if(solid(Math.floor(n.x/T),Math.floor(n.y/T))||n.y-6>surf(n.x)){n.x-=n.vx*dt;n.vx*=-.45;}
     const py=n.y;n.y+=n.vy*dt;
     const c=Math.floor(n.x/T), r=Math.floor((n.y+4)/T), t2=tile(c,r);
-    if(n.vy>0&&(t2==="#"||t2==="W"||t2==="P"||(t2==="="&&py+4<=r*T+1))){n.y=r*T-4;n.vy=Math.abs(n.vy)<120?0:-n.vy*.4;n.vx*=.6;}
+    const gs=surf(n.x);
+    if(n.vy>0&&n.y+4>=gs&&py+4<=gs+12){n.y=gs-4;n.vy=Math.abs(n.vy)<120?0:-n.vy*.4;n.vx*=.6;}
+    else if(n.vy>0&&(t2==="#"||t2==="W"||t2==="P"||(t2==="="&&py+4<=r*T+1))){n.y=r*T-4;n.vy=Math.abs(n.vy)<120?0:-n.vy*.4;n.vx*=.6;}
     else if(n.vy<0&&solid(c,Math.floor((n.y-4)/T))){n.y=py;n.vy=0;}
     if(n.fuse<=0&&n.y<=VIEW_H+40)explode(n);
   }
@@ -478,12 +528,14 @@ function update(){
   for(const o of bolts){
     o.life-=dt;if(o.rest)continue;
     o.vy=Math.min(o.vy+1300*dt,900);o.rot+=o.vx*dt*.15;
-    o.x+=o.vx*dt;if(solid(Math.floor(o.x/T),Math.floor(o.y/T))){o.x-=o.vx*dt;o.vx*=-.3;}
+    o.x+=o.vx*dt;if(solid(Math.floor(o.x/T),Math.floor(o.y/T))||o.y-6>surf(o.x)){o.x-=o.vx*dt;o.vx*=-.3;}
     const py=o.y;o.y+=o.vy*dt;
     const c=Math.floor(o.x/T), r=Math.floor(o.y/T);
     if(tile(c,r)==="^"&&!isQuiet(c,r)){quietGroup(c,r);o.rest=true;o.life=Math.min(o.life,1.2);continue;}
     const rb=Math.floor((o.y+2)/T), tb=tile(c,rb);
-    if(o.vy>0&&(tb==="#"||tb==="W"||tb==="P"||(tb==="="&&py+2<=rb*T+1))){o.y=rb*T-2;o.rest=true;o.life=Math.min(o.life,1.2);}
+    const gs=surf(o.x);
+    if(o.vy>0&&o.y+2>=gs&&py+2<=gs+12){o.y=gs-2;o.rest=true;o.life=Math.min(o.life,1.2);}
+    else if(o.vy>0&&(tb==="#"||tb==="W"||tb==="P"||(tb==="="&&py+2<=rb*T+1))){o.y=rb*T-2;o.rest=true;o.life=Math.min(o.life,1.2);}
     else if(o.vy<0&&solid(c,Math.floor((o.y-2)/T))){o.y=py;o.vy=0;}
   }
   bolts=bolts.filter(o=>o.life>0&&o.y<VIEW_H+40);
@@ -494,7 +546,9 @@ function update(){
     if(k.taken)continue;
     k.vy=Math.min(k.vy+1300*dt,900);k.y+=k.vy*dt;
     const r=Math.floor((k.y+12)/T), c=Math.floor((k.x+5)/T);
-    if(k.vy>0&&standable(tile(c,r))&&k.y+12-k.vy*dt<=r*T+1){k.y=r*T-12;k.vy=0;}
+    const gs=surf(k.x+5);
+    if(k.vy>0&&k.y+12>=gs&&k.y+12-k.vy*dt<=gs+12){k.y=gs-12;k.vy=0;}
+    else if(k.vy>0&&standable(tile(c,r))&&k.y+12-k.vy*dt<=r*T+1){k.y=r*T-12;k.vy=0;}
     const bd=body();
     if(Math.abs(bd.x+bd.w/2-(k.x+5))<bd.w/2+7&&Math.abs(bd.y+bd.h/2-(k.y+6))<22){k.taken=true;nades+=k.n;hud();
       texts.push({x:k.x+5,y:k.y-6,s:`+${k.n} ${k.n>1?"гранати":"граната"}`,life:1});burst(k.x+5,k.y+6,"#c3d08a",8,.5);}
@@ -504,7 +558,7 @@ function update(){
   texts=texts.filter(s=>s.life>0);
   for(const b of ebullets){
     b.x+=b.vx*dt;b.life-=dt;
-    if(solid(Math.floor(b.x/T),Math.floor(b.y/T))){b.life=0;burst(b.x,b.y,"#f3d27a",3,.4);continue;}
+    if(solid(Math.floor(b.x/T),Math.floor(b.y/T))||b.y>surf(b.x)){b.life=0;burst(b.x,b.y,"#f3d27a",3,.4);continue;}
     if(driving()){if(b.x>car.x&&b.x<car.x+car.w&&b.y>car.y&&b.y<car.y+car.h){b.life=0;burst(b.x,b.y,"#f3d27a",4,.5);carDamage(4);}continue;}
     if(b.x>p.x&&b.x<p.x+p.w&&b.y>p.y&&b.y<p.y+p.h){b.life=0;if(hurt(false))return;}
   }
@@ -549,7 +603,7 @@ function update(){
       moveY(e);
       if(walk&&e.onGround){
         const ahead=e.face>0?e.x+e.w+1:e.x-1, c=Math.floor(ahead/T), fr=Math.floor((e.y+e.h+1)/T);
-        if(!standable(tile(c,fr))||tile(c,Math.floor((e.y+e.h-1)/T))==="^")e.face=-e.face;
+        if(!(standable(tile(c,fr))||surf(ahead)<=e.y+e.h+10)||tile(c,Math.floor((e.y+e.h-1)/T))==="^")e.face=-e.face;
       }
     }
     if(driving()){
@@ -812,8 +866,7 @@ function uazLocal(c){
 }
 function drawCar(){
   const c=car;
-  ctx.save();ctx.translate(c.x+c.w/2,c.y+c.h);ctx.scale(c.face,1);
-  if(!c.onGround&&!c.wreck)ctx.rotate(Math.max(-.12,Math.min(.12,c.vy/3500)));
+  ctx.save();ctx.translate(c.x+c.w/2,c.y+c.h);ctx.rotate(c.ang);ctx.scale(c.face,1);
   uazLocal(c);ctx.restore();
   if(c.wreck)return;
   if(c.drive||c.hp<CAR_MAX){
@@ -843,6 +896,54 @@ function drawEnemy(e){
   if(e.type==="stalker"&&e.alert){ctx.fillStyle="#ff5a4a";ctx.font="bold 13px system-ui, sans-serif";ctx.textAlign="center";ctx.fillText("!",e.x+e.w/2,e.y-12);}
 }
 
+// ---------- terrain drawing ----------
+const groundY=x=>BASE-hillAt(x);
+function drawGround(c0,c1){
+  for(let c=c0;c<=c1;c++){
+    if(terr.gap[c])continue;
+    let e=c;while(e<c1&&!terr.gap[e+1])e++;
+    const sx=c*T, ex=(e+1)*T;
+    const edge=()=>{ctx.beginPath();ctx.moveTo(sx,groundY(sx));for(let x=sx+4;x<ex;x+=4)ctx.lineTo(x,groundY(x));ctx.lineTo(ex,groundY(ex-.01));};
+    ctx.save();
+    edge();ctx.lineTo(ex,VIEW_H+2);ctx.lineTo(sx,VIEW_H+2);ctx.closePath();
+    ctx.fillStyle="#4a4c44";ctx.fill();ctx.clip();
+    // stone texture, same as the old ground tiles
+    ctx.strokeStyle="rgba(0,0,0,.3)";ctx.lineWidth=1;
+    for(let cc=c;cc<=e;cc++)for(let r=6;r<ROWS;r++){
+      const x=cc*T, y=r*T;
+      if(y+T<groundY(x+16)-4)continue;
+      ctx.fillStyle=r<10?"#555850":"#4a4c44";ctx.fillRect(x,y,T,T);
+      ctx.fillStyle="rgba(0,0,0,.22)";ctx.fillRect(x,y+T-2,T,2);ctx.fillRect(x+T-2,y,2,T);
+      if(rnd(cc*13+r)>.5){ctx.beginPath();ctx.moveTo(x+6+rnd(cc)*10,y+8);ctx.lineTo(x+12+rnd(cc+1)*8,y+17);ctx.lineTo(x+9+rnd(cc+2)*10,y+26);ctx.stroke();}
+      ctx.fillStyle="rgba(120,90,60,.35)";if(rnd(cc*5+r*3)>.6)ctx.fillRect(x+4,y+20,7,4);
+    }
+    if(TH.grass){edge();ctx.lineJoin="round";ctx.lineWidth=12;ctx.strokeStyle=TH.grass[0];ctx.stroke();ctx.lineWidth=6;ctx.strokeStyle=TH.grass[1];ctx.stroke();}
+    ctx.restore();
+    if(TH.grass){ctx.fillStyle=TH.grass[1];
+      for(let cc=c;cc<=e;cc++){const x1=cc*T+5+(cc*11%18), x2=cc*T+12+(cc*7%14);
+        ctx.fillRect(x1,groundY(x1)-3,1.5,3);ctx.fillRect(x2,groundY(x2)-2,1.5,2);}}
+    c=e;
+  }
+}
+function drawRamps(x0,x1){
+  for(const q of terr.ramps){
+    if(q.x1<x0||q.x0>x1)continue;
+    const b0=groundY(q.x0), b1=groundY(q.x1-.01), top=b1-q.h, len=q.x1-q.x0;
+    ctx.fillStyle="#5a3319";ctx.beginPath();ctx.moveTo(q.x0,b0);ctx.lineTo(q.x1,top);ctx.lineTo(q.x1,b1);ctx.closePath();ctx.fill();
+    // supports
+    ctx.strokeStyle="#3a2010";ctx.lineWidth=3;ctx.beginPath();
+    for(let x=q.x0+len*.35;x<q.x1;x+=len*.3){const y=b0+(top-b0)*(x-q.x0)/len;ctx.moveTo(x,y);ctx.lineTo(x,BASE);}
+    ctx.moveTo(q.x1-3,top);ctx.lineTo(q.x1-3,b1);ctx.moveTo(q.x0+len*.35,BASE-2);ctx.lineTo(q.x1-3,top+6);ctx.stroke();
+    // deck
+    ctx.lineCap="butt";ctx.strokeStyle="#9a5a30";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(q.x0,b0-2);ctx.lineTo(q.x1,top-2);ctx.stroke();
+    ctx.strokeStyle="#4a2a17";ctx.lineWidth=1;
+    for(let k=1;k<len/12;k++){const x=q.x0+k*12, y=b0+(top-b0)*k*12/len;ctx.beginPath();ctx.moveTo(x,y-4.5);ctx.lineTo(x,y+.5);ctx.stroke();}
+    if(q.launch){ // hazard stripes on the lip
+      for(let k=0;k<4;k++){ctx.fillStyle=k%2?"#1d1a08":"#e5c33a";ctx.fillRect(q.x1-4,top-4+k*5,4,5);}
+    }
+  }
+}
+
 // ---------- draw ----------
 function draw(){
   ctx.setTransform(dpr*scale,0,0,dpr*scale,0,0);
@@ -857,6 +958,7 @@ function draw(){
   const sk=shake>0?shake/.3:0;
   ctx.save();ctx.translate(-Math.round(camX)+(Math.random()-.5)*10*sk,(Math.random()-.5)*8*sk);
   const c0=Math.max(0,Math.floor(camX/T)), c1=Math.min(L.w-1,Math.ceil((camX+viewW)/T));
+  if(terr){drawGround(c0,c1);drawRamps(camX-T,camX+viewW+T);}
   for(let r=0;r<ROWS;r++)for(let c=c0;c<=c1;c++){
     const ch=grid[r][c], x=c*T, y=r*T;
     if(ch==="#"){
@@ -930,7 +1032,7 @@ function draw(){
   // checkpoint lanterns
   for(const c of L.cps){
     const x=c*T+16, on=cpCol>=c;
-    const by=((L.spawnRow||9)+1)*T;
+    const by=topAt(x,2);
     ctx.fillStyle="#3a3c34";ctx.fillRect(x-1.5,by-32,3,32);
     ctx.fillStyle=on?"#7fe08a":"#4a5a4a";if(on){ctx.shadowColor="#7fe08a";ctx.shadowBlur=12;}
     ctx.fillRect(x-4,by-40,8,9);ctx.shadowBlur=0;
@@ -946,7 +1048,7 @@ function draw(){
     ctx.fillStyle="#7a6a4a";ctx.fillRect(lx,0,3,8*T);ctx.fillRect(lx+20,0,3,8*T);
     for(let y=8;y<8*T;y+=14)ctx.fillRect(lx,y,23,3);
   }else{
-  const fx=L.flag*T+14, top=10*T-104;
+  const fx=L.flag*T+14, top=topAt(fx,2)-104;
   ctx.fillStyle="#5c5f57";ctx.fillRect(fx,top,4,104);
   ctx.fillStyle="#e5c33a";ctx.fillRect(fx-12,top,28,28);
   ctx.strokeStyle="#1d1a08";ctx.lineWidth=2;ctx.strokeRect(fx-11,top+1,26,26);
